@@ -1,5 +1,5 @@
 // src/CountryDetail.js
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { CountryContext } from "../utils/CountryContext";
 import { StickyScroll } from "../components/stickyScroll";
@@ -9,6 +9,14 @@ const CountryDetail = () => {
   const { countries } = useContext(CountryContext);
 
   const country = countries.find((country) => country.name.common === name);
+  const formatTimezones = (timezones: any[]) => {
+    return timezones
+      .reduce((acc: any, timezone: any, index: number) => {
+        const separator = (index + 1) % 3 === 0 ? "\n" : ", ";
+        return acc + timezone + separator;
+      }, "")
+      .trim();
+  };
 
   if (!country) {
     return <div>Country not found</div>;
@@ -44,7 +52,7 @@ const CountryDetail = () => {
       description: `Independent: ${country.independent ? "yes" : "no"}
     UN member: ${country.unMember ? "yes" : "no"}
     Status: ${country.status}
-    Timezones: ${country.timezones}
+    Timezones: ${formatTimezones(country.timezones)}
     Start Of Week: ${country.startOfWeek}
     `,
       content: (

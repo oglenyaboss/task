@@ -12,20 +12,29 @@ export default function Root() {
   const [searchTerm, setSearchTerm] = React.useState("");
   const navigate = useNavigate();
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="w-screen h-screen flex justify-center items-center bg-slate-950">
+        <p className="text-xl text-slate-200">Loading...</p>
+      </div>
+    );
   if (error)
     return (
-      <div className="error">Error fetching data. Please try again later</div>
+      <div className="w-screen h-screen flex justify-center items-center bg-slate-950">
+        <p className="text-xl text-slate-200">
+          Error fetching data. Please try again later
+        </p>
+      </div>
     );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const country = countries.find(
-      (c) => c.name.common.toLowerCase() === searchTerm.toLowerCase(),
+      (c) => c.name.common.toLowerCase() === searchTerm.toLowerCase()
     );
 
     if (country) {

@@ -1,15 +1,18 @@
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import { fetchCountries } from "./functions";
+import { Country, CountryContextState } from "./types";
 
-const CountryContext = createContext({
+const CountryContext = createContext<CountryContextState>({
   countries: [],
   loading: true,
   placeholders: [],
   error: false,
 });
 
-const CountryProvider = ({ children }) => {
-  const [countries, setCountries] = useState([]);
+import { ReactNode } from "react";
+
+const CountryProvider = ({ children }: { children: ReactNode }) => {
+  const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
   const [placeholders, setPlaceholders] = useState([]);
   const [error, setError] = useState(false);
@@ -20,7 +23,9 @@ const CountryProvider = ({ children }) => {
         const data = await fetchCountries();
         setCountries(data);
         setLoading(false);
-        const countryNames = data.map((country) => country.name.common);
+        const countryNames = data.map(
+          (country: Country) => country.name.common
+        );
         setPlaceholders(countryNames);
       } catch (err) {
         console.error("Failed to fetch countries:", err);
